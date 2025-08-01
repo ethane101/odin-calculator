@@ -29,6 +29,7 @@ button:hover {
     padding: 1vw;
     border-radius: 1vw;
     border: 0.25vw solid #a2afb8;
+    text-align: right;
 }
 
 #AC {
