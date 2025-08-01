@@ -39,6 +39,10 @@ operatorSymbols.forEach(operator => {
 });
 
 // create mechanism for keeping track of the number and operation
+let currOperator = '';
+let firstNum = undefined;
+let secondNum = undefined;
+
 // maybe have a virtual element representing the screen element?
 
 const screen = document.querySelector("#screen");
@@ -46,16 +50,55 @@ let screenContent = "";
 
 numbers.addEventListener('click', (e) => {
     let num = e.target.id;
-    screenContent += num;
-    screen.textContent = screenContent;
+    if (num != 'numbers') {
+        screenContent += num;
+        screen.textContent = screenContent;
+    }
 });
 
 clearButton.addEventListener('click', (e) => {
     screenContent = "";
     screen.textContent = screenContent;
+    firstNum = undefined;
+    secondNum = undefined;
+    currOperator = '';
 });
 
 operators.addEventListener('click', (e) => {
     let operator = e.target.id;
-    console.log(operator);
+    if (operator == "=" || currOperator != '') {
+        if (currOperator != '') {
+            secondNum = +screenContent;
+            let result = operate(firstNum, secondNum, currOperator);
+            currOperator = '';
+            firstNum = result;
+            secondNum = undefined;
+            screenContent = result;
+            screen.textContent = screenContent;
+        }
+    } else {
+        currOperator = operator;
+        firstNum = +screenContent;
+        screenContent = "";
+        screen.textContent = screenContent;
+    }
 });
+
+function operate(a, b, operator) {
+    switch (operator) {
+        case '+':
+            return a + b;
+        case '-':
+            return a - b;
+        case 'x':
+            return a * b;
+        case '/':
+            if (Number.isInteger(a/b)) {
+                return a/b;
+            } else {
+                return (a/b)
+            }
+        default:
+            return 'ERROR';
+    }
+}
